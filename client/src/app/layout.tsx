@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from 'next/font/google'
+import { Inter, Poppins, Amatic_SC } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/react"
 import "./globals.css";
 
@@ -10,6 +10,11 @@ const poppins = Poppins({
   display: 'swap',
   weight: ['400', '500', '600', '700', '200', '800', '900'],
 })
+
+const amatic_sc = Amatic_SC({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
