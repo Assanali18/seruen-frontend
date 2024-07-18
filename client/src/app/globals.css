@@ -7,5 +7,5 @@ body{
     font-family: 'Poppins', sans-serif;
 }
 h1, h2 {
-    font-family: 'Amatic SC', cursive;
+    font-family: 'Amatic SC', 'Poppins',sans-serif ;
 }

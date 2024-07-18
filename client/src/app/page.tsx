@@ -6,6 +6,7 @@ import { UserPreferencesDTO } from "@/lib/types";
 import { axiosInstance } from "@/axios/axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import "./globals.css";
 
 export default function Home() {
     const [name, setName] = useState('');
