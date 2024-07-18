@@ -170,7 +170,7 @@ export default function Home() {
                                 <button
                                     type="button"
                                     onClick={handleNext}
-                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-lg mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
+                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-[40px] mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
                                 >
                                     <span className="sm:hidden">Далее</span>
                                     <img src="/arrow.svg" alt="next" className="hidden sm:block w-6 sm:w-[50px] h-6 sm:h-[60px]" />
@@ -210,7 +210,7 @@ export default function Home() {
                                 <button
                                     type="button"
                                     onClick={handleNext}
-                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-lg mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
+                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-[40px] mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
                                 >
                                     <span className="sm:hidden">Далее</span>
                                     <img src="/arrow.svg" alt="next" className="hidden sm:block w-6 sm:w-[50px] h-6 sm:h-[70px]" />
@@ -273,7 +273,7 @@ export default function Home() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-lg mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
+                                    className="h-12 sm:h-16 w-full sm:w-auto bg-[#C5DF93] text-white rounded-[40px] mt-2 sm:mt-0 sm:px-6 flex justify-center items-center transition-transform duration-300 transform hover:scale-105"
                                 >
                                     <span className="sm:hidden">Далее</span>
                                     <img src="/arrow.svg" alt="submit" className="hidden sm:block w-6 sm:w-[50px] h-6 sm:h-[70px]" />
