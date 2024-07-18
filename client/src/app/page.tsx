@@ -60,9 +60,9 @@ export default function Home() {
 
             if (response.status === 201) {
                 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    window.location.assign('tg://resolve?domain=EventEaseBot');
+                    window.location.assign('tg://resolve?domain=SeruenAIDevBot');
                 } else {
-                    window.location.assign('https://t.me/EventEaseBot');
+                    window.location.assign('https://t.me/SeruenAIDevBot');
                 }
                 toast.success('Спасибо за регистрацию! Пожалуйста, напишите боту в телеграме');
             } else {
