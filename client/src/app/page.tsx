@@ -141,8 +141,8 @@ export default function Home() {
                 <div className="header-title hidden sm:block font-semibold text-white text-5xl">seruen</div>
             </header>
             <main className="flex flex-col items-center flex-1 w-full pt-24 sm:pt-[100px] px-4">
-                <h1 className="font-amatic w-full sm:w-[60%] text-2xl sm:text-5xl font-bold text-center text-[#FFAE00] mb-4">Лучшие события в вашем городе!</h1>
-                <h2 className="font-amatic w-full sm:w-[60%] text-base sm:text-2xl font-medium text-center text-[#9A9A9A] pb-7">Введите свои данные, чтобы получать персональные рекомендации и не пропустить интересные мероприятия.</h2>
+                <h1 className=" w-full sm:w-[60%] text-2xl sm:text-5xl font-bold text-center text-[#FFAE00] mb-4">Лучшие события в вашем городе!</h1>
+                <h2 className=" w-full sm:w-[60%] text-base sm:text-2xl font-medium text-center text-[#9A9A9A] pb-7">Введите свои данные, чтобы получать персональные рекомендации и не пропустить интересные мероприятия.</h2>
                 <form className="w-full sm:w-[60%] space-y-4" onSubmit={handleSubmit}>
                     {currentStep === 0 && (
                         <div className="w-full flex flex-col space-y-2" onKeyDown={handleEnterKey}>

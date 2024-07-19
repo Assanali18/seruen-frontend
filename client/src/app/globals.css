@@ -7,8 +7,4 @@
         @apply font-poppins;
         overflow: hidden;
     }
-
-    h1, h2 {
-        @apply font-amatic;
-    }
 }
