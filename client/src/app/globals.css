@@ -2,10 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-}
-h1, h2 {
-    font-family: 'Amatic SC', 'Poppins',sans-serif ;
+@layer base {
+    body {
+        @apply font-poppins;
+        overflow: hidden;
+    }
+
+    h1, h2 {
+        @apply font-amatic;
+    }
 }

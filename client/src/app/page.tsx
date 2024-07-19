@@ -6,7 +6,7 @@ import { UserPreferencesDTO } from "@/lib/types";
 import { axiosInstance } from "@/axios/axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import "./globals.css";
+import {Amatic_SC} from "next/font/google";
 
 export default function Home() {
     const [name, setName] = useState('');
@@ -136,13 +136,13 @@ export default function Home() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#e0f7fa] bg-cover bg-center bg-no-repeat" style={{ backgroundImage: 'url(/bg-almaty.png)' }}>
-            <header className="flex items-center justify-start sm:justify-center w-full p-4 bg-[#C5DF93] fixed top-0 z-10 sm:static sm:w-[60%] sm:rounded-[30px] sm:mt-6 sm:p-4">
-                <div className="text-white text-lg sm:hidden">seruen</div>
-                <div className="hidden sm:block font-semibold text-white  text-5xl">seruen</div>
+            <header className="flex items-center justify-start sm:justify-center w-full p-4 bg-[#C5DF93] h-16 fixed top-0 z-10 sm:static sm:w-[80%] sm:rounded-[30px] sm:mt-6 sm:p-4">
+                <div className="header-title text-white text-lg sm:hidden">seruen</div>
+                <div className="header-title hidden sm:block font-semibold text-white text-5xl">seruen</div>
             </header>
             <main className="flex flex-col items-center flex-1 w-full pt-24 sm:pt-[100px] px-4">
-                <h1 className="w-full sm:w-[60%] text-2xl sm:text-4xl font-bold text-center text-[#FFAE00] mb-4">Лучшие события в вашем городе!</h1>
-                <h2 className="w-full sm:w-[60%] text-base sm:text-2xl font-medium text-center text-[#9A9A9A] pb-7">Введите свои данные, чтобы получать персональные рекомендации и не пропустить интересные мероприятия.</h2>
+                <h1 className="font-amatic w-full sm:w-[60%] text-2xl sm:text-5xl font-bold text-center text-[#FFAE00] mb-4">Лучшие события в вашем городе!</h1>
+                <h2 className="font-amatic w-full sm:w-[60%] text-base sm:text-2xl font-medium text-center text-[#9A9A9A] pb-7">Введите свои данные, чтобы получать персональные рекомендации и не пропустить интересные мероприятия.</h2>
                 <form className="w-full sm:w-[60%] space-y-4" onSubmit={handleSubmit}>
                     {currentStep === 0 && (
                         <div className="w-full flex flex-col space-y-2" onKeyDown={handleEnterKey}>
