@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 export const axiosInstance = axios.create({
-    baseURL: 'https://seruen-backend-production.up.railway.app/',
+    baseURL: `${process.env.SERVER_API_URL}`,
     headers: {
         'Content-Type': 'application/json'
     }

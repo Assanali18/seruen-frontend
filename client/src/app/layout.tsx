@@ -17,7 +17,7 @@ const amatic_sc = Amatic_SC({
 });
 
 export const metadata: Metadata = {
-  title: "Map of events",
+  title: "Seruen AI",
   description: "Узнай какие мероприятия рядом с тобой!",
 };
 
