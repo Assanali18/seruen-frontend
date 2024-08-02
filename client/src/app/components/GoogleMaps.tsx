@@ -28,14 +28,16 @@ const getCoordinatesFromAddress = async (address: string | undefined) => {
 
 export default function GoogleMaps() {
     // const mapRef = React.useRef<HTMLDivElement>(null);
-    const [userData, setUserData] = useState<any>(null);
+    const [userData, setUserData] = useState<any | null>(null);
     const [recommendations, setRecommendations] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const { user } = WebApp.initDataUnsafe;
-                const username = user?.username || user?.first_name;
+                if(WebApp.initDataUnsafe.user){
+                    setUserData(WebApp.initDataUnsafe.user);
+                }
+                const username = userData.username;
 
                 if (!username) {
                     console.error('No user data available');
@@ -46,7 +48,6 @@ export default function GoogleMaps() {
                 const response = await axios.get(`/api/users/${username}/recommendations`);
                 console.log('response', response.data);
 
-                setUserData(response.data);
                 setRecommendations(response.data.recommendations || []);
             } catch (error) {
                 console.error('Error fetching user data or recommendations:', error);
