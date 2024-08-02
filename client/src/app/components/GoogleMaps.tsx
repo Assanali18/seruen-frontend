@@ -44,8 +44,9 @@ export default function GoogleMaps() {
                     return;
                 }
 
-                // Получаем данные пользователя из базы данных (замените на реальный запрос)
+                console.log('request to', `${process.env.SERVER_API_URL}/api/users/${username}/recommendations`)
                 const response = await axios.get(`/api/users/${username}/recommendations`);
+
                 console.log('response', response.data);
 
                 setRecommendations(response.data.recommendations || []);
