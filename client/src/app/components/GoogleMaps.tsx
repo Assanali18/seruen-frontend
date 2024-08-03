@@ -88,42 +88,37 @@ export default function GoogleMaps() {
                     setNoRecommendations(true);
                 }
 
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(async (position) => {
-                        const userPosition = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                        };
-                        setUserLocation(userPosition);
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const userPosition = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            setUserLocation(userPosition);
 
-                        const positions = await Promise.all(
-                            recommendations.map(async (recommendation: any) => {
-                                if (recommendation.venue) {
-                                    const coordinates = await getCoordinatesFromAddress(recommendation.venue);
-                                    return { ...coordinates, recommendation };
-                                }
-                                return null;
-                            })
-                        );
+                            const positions = await Promise.all(
+                                recommendations.map(async (recommendation:any) => {
+                                    if (recommendation.venue) {
+                                        const coordinates = await getCoordinatesFromAddress(recommendation.venue);
+                                        return { ...coordinates, recommendation };
+                                    }
+                                    return null;
+                                })
+                            );
 
-                        setMarkerPositions(positions.filter(position => position !== null));
-                    }, async (error) => {
-                        console.error('Error fetching user location:', error);
-                        // Если ошибка, запрашиваем геоданные через Telegram
-                        try {
-                            const geoData = await WebApp.requestGeoLocation();
-                            if (geoData) {
-                                const userPosition = {
-                                    lat: geoData.latitude,
-                                    lng: geoData.longitude,
-                                };
-                                setUserLocation(userPosition);
-                            }
-                        } catch (telegramError) {
-                            console.error('Error fetching user location via Telegram:', telegramError);
+                            setMarkerPositions(positions.filter(position => position !== null));
+                        },
+                        (error) => {
+                            console.error('Error fetching user location:', error);
+                            // Обработайте ошибку, возможно покажите сообщение пользователю
                         }
-                    });
+                    );
+                } else {
+                    console.error("Geolocation is not available.");
+                    // Обработайте отсутствие поддержки геолокации, возможно покажите сообщение пользователю
                 }
+
             } catch (error) {
                 console.error('Error fetching user data or recommendations:', error);
             } finally {
@@ -147,7 +142,7 @@ export default function GoogleMaps() {
                     const { Map, Marker } = google.maps;
 
                     const options: google.maps.MapOptions = {
-                        center: userLocation || { lat: 43.25667, lng: 76.92861 },
+                        center: userLocation || { lat:43.25667, lng: 76.92861},
                         zoom: 12,
                         mapTypeControl: false,
                         fullscreenControl: false,
