@@ -50,6 +50,7 @@ export default function GoogleMaps() {
     const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [noRecommendations, setNoRecommendations] = useState(false);
+    const [geoPermissionDenied, setGeoPermissionDenied] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -98,7 +99,7 @@ export default function GoogleMaps() {
                             setUserLocation(userPosition);
 
                             const positions = await Promise.all(
-                                recommendations.map(async (recommendation:any) => {
+                                recommendations.map(async (recommendation: any) => {
                                     if (recommendation.venue) {
                                         const coordinates = await getCoordinatesFromAddress(recommendation.venue);
                                         return { ...coordinates, recommendation };
@@ -111,12 +112,12 @@ export default function GoogleMaps() {
                         },
                         (error) => {
                             console.error('Error fetching user location:', error);
-                            // Обработайте ошибку, возможно покажите сообщение пользователю
+                            setGeoPermissionDenied(true);
                         }
                     );
                 } else {
                     console.error("Geolocation is not available.");
-                    // Обработайте отсутствие поддержки геолокации, возможно покажите сообщение пользователю
+                    setGeoPermissionDenied(true);
                 }
 
             } catch (error) {
@@ -130,7 +131,7 @@ export default function GoogleMaps() {
     }, []);
 
     useEffect(() => {
-        if (!loading && !noRecommendations && userLocation) {
+        if (!loading && !noRecommendations && !geoPermissionDenied && userLocation) {
             const initializeMap = async () => {
                 const loader = new Loader({
                     apiKey: googleMapsApiKey,
@@ -142,7 +143,7 @@ export default function GoogleMaps() {
                     const { Map, Marker } = google.maps;
 
                     const options: google.maps.MapOptions = {
-                        center: userLocation || { lat:43.25667, lng: 76.92861},
+                        center: userLocation || { lat: 43.25667, lng: 76.92861 },
                         zoom: 12,
                         mapTypeControl: false,
                         fullscreenControl: false,
@@ -266,7 +267,7 @@ export default function GoogleMaps() {
 
             initializeMap();
         }
-    }, [userLocation, markerPositions, loading, noRecommendations]);
+    }, [userLocation, markerPositions, loading, noRecommendations, geoPermissionDenied]);
 
     return (
         <div>
@@ -295,7 +296,13 @@ export default function GoogleMaps() {
             ) : noRecommendations ? (
                 <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
                     <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
-                        Дождитесь, пока ваши рекомендации загрузятся, мы вас уведомим...
+                        У вас пока нет рекомендаций. Пожалуйста, подождите, пока они загрузятся.
+                    </p>
+                </div>
+            ) : geoPermissionDenied ? (
+                <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
+                    <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+                        Для отображения карты, пожалуйста, предоставьте доступ к геоданным и включите геопозицию.
                     </p>
                 </div>
             ) : (
