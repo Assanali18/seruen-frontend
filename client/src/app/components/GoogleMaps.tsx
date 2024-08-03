@@ -7,6 +7,7 @@ import {axiosInstance} from "@/axios/axiosInstance";
 
 
 const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
+const serverApiUrl = process.env.NEXT_PUBLIC_SERVER_API_URL as string;
 
 const getCoordinatesFromAddress = async (address: string | undefined) => {
     try {
@@ -47,7 +48,7 @@ export default function GoogleMaps() {
                     return;
                 }
 
-                const url = `${process.env.NEXT_PUBLIC_SERVER_API_URL}/api/users/${username}/recommendations`;
+                const url = `${serverApiUrl}/api/users/${username}/recommendations`;
                 console.log('request to', url);
                 setRequestUrl(url);
 
