@@ -29,11 +29,25 @@ const getCoordinatesFromAddress = async (address: string | undefined) => {
     }
 };
 
+const getMarkerIconUrl = (eventDate: string) => {
+    const today = new Date();
+    const eventDay = new Date(eventDate);
+    const daysUntilEvent = (eventDay.getTime() - today.getTime()) / (1000 * 3600 * 24);
+
+    if (daysUntilEvent <= 2) {
+        return 'https://example.com/green-marker.png'; // Зеленый маркер
+    } else if (daysUntilEvent > 2 && daysUntilEvent <= 10) {
+        return 'https://example.com/yellow-marker.png'; // Желтый маркер
+    } else {
+        return 'https://example.com/red-marker.png'; // Красный маркер
+    }
+};
+
 export default function GoogleMaps() {
     const mapRef = useRef<HTMLDivElement>(null);
     const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
     const [markerPositions, setMarkerPositions] = useState<any[]>([]);
-    const [selectedEvent, setSelectedEvent] = useState<any | null>(null); // Состояние для выбранного события
+    const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -52,7 +66,6 @@ export default function GoogleMaps() {
                         throw new Error('No username provided');
                     }
                 } catch (err) {
-                    // Если запрос по username возвращает 404, пробуем использовать first_name
                     if (axios.isAxiosError(err) && err.response?.status === 404) {
                         const firstName = user?.first_name;
                         if (firstName) {
@@ -70,7 +83,6 @@ export default function GoogleMaps() {
                 console.log('response', response.data);
                 const recommendations = response.data || [];
 
-                // Определяем местоположение пользователя (если доступно)
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(async (position) => {
                         const userPosition = {
@@ -79,7 +91,6 @@ export default function GoogleMaps() {
                         };
                         setUserLocation(userPosition);
 
-                        // Получаем координаты для каждого места из рекомендаций
                         const positions = await Promise.all(
                             recommendations.map(async (recommendation: any) => {
                                 if (recommendation.venue) {
@@ -90,7 +101,6 @@ export default function GoogleMaps() {
                             })
                         );
 
-                        // Фильтруем null значения
                         setMarkerPositions(positions.filter(position => position !== null));
                     }, (error) => {
                         console.error('Error fetching user location:', error);
@@ -114,10 +124,10 @@ export default function GoogleMaps() {
             });
 
             const google = await loader.load();
-            const { Map, Marker, InfoWindow } = google.maps;
+            const { Map, Marker } = google.maps;
 
             const options: google.maps.MapOptions = {
-                center: userLocation,
+                center: userLocation || { lat: 39.60128890889341, lng: -9.069839810859907 },
                 zoom: 12,
                 mapTypeControl: false,
                 fullscreenControl: false,
@@ -127,27 +137,30 @@ export default function GoogleMaps() {
 
             const map = new Map(mapRef.current as HTMLDivElement, options);
 
-            // Добавление маркера для местоположения пользователя
             if (userLocation) {
                 new Marker({
                     map,
                     position: userLocation,
                     icon: {
-                        url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png', // Укажите корректный URL иконки для пользователя
+                        url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png',
                         scaledSize: new google.maps.Size(50, 50),
                     },
                 });
             }
 
-            // Отображение маркеров для рекомендаций
-            markerPositions.forEach((position) => {
+            markerPositions.forEach(({ lat, lng, recommendation }) => {
+                const iconUrl = getMarkerIconUrl(recommendation.date);
                 const marker = new Marker({
                     map,
-                    position: { lat: position.lat, lng: position.lng },
+                    position: { lat, lng },
+                    icon: {
+                        url: iconUrl,
+                        scaledSize: new google.maps.Size(30, 30),
+                    },
                 });
 
                 marker.addListener('click', () => {
-                    setSelectedEvent(position.recommendation);
+                    setSelectedEvent(recommendation);
                 });
             });
         };
@@ -176,11 +189,35 @@ export default function GoogleMaps() {
             )}
 
             {selectedEvent && (
-                <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', backgroundColor: 'white', padding: '10px', boxShadow: '0px -2px 10px rgba(0, 0, 0, 0.1)' }}>
-                    <h3>{selectedEvent.title}</h3>
-                    <p>{selectedEvent.venue}</p>
-                    <p>{selectedEvent.date}</p>
-                    <button onClick={() => window.open(selectedEvent.ticketLink, '_blank')}>Подробнее</button>
+                <div style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    backgroundColor: '#fff',
+                    padding: '10px 20px',
+                    boxShadow: '0px -2px 10px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '10px 10px 0 0',
+                    transition: 'all 0.3s ease-in-out'
+                }}>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{selectedEvent.title}</h3>
+                    <p style={{ margin: '5px 0', fontSize: '14px', color: '#555' }}>{selectedEvent.venue}</p>
+                    <p style={{ margin: '5px 0', fontSize: '14px', color: '#777' }}>{selectedEvent.date}</p>
+                    <button
+                        onClick={() => window.open(selectedEvent.ticketLink, '_blank')}
+                        style={{
+                            marginTop: '10px',
+                            padding: '10px 20px',
+                            backgroundColor: '#007bff',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                        }}
+                    >
+                        Подробнее
+                    </button>
                 </div>
             )}
         </div>
