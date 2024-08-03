@@ -275,49 +275,50 @@ export default function GoogleMaps() {
                     </div>
                 </div>
             ) : (
-                <div
-                    ref={mapRef}
-                    className="h-[calc(100vh-56px)] w-full"
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                    }}
-                />
-            )}
+                <>
+                    <div
+                        ref={mapRef}
+                        className="h-[calc(100vh-56px)] w-full"
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                        }}
+                    />
 
-            <div
-                style={{
-                    position: 'fixed',
-                    top: 20,
-                    right: 20,
-                    backgroundColor: '#fff',
-                    borderRadius: '5px',
-                    padding: '10px',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
-                    zIndex: 1000,
-                }}
-            >
-                <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>Легенда</h4>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <img src="/markers/green.png" alt="Upcoming events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
-                    <span style={{ fontSize: '12px' }}>Ближайшие события (0-2 дня)</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <img src="/markers/yellow.png" alt="Upcoming events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
-                    <span style={{ fontSize: '12px' }}>События в пределах 10 дней</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <img src="/markers/red.png" alt="Future events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
-                    <span style={{ fontSize: '12px' }}>События через 10 дней и более</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src="https://cdn-icons-png.flaticon.com/512/7976/7976479.png" alt="User location" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
-                    <span style={{ fontSize: '12px' }}>Местоположение пользователя</span>
-                </div>
-            </div>
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: 20,
+                            right: 20,
+                            backgroundColor: 'transparent',
+                            padding: '10px',
+                            zIndex: 1000,
+                            color: '#fff',
+                        }}
+                    >
+                        <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>Легенда</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                            <img src="/markers/green.png" alt="Upcoming events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
+                            <span style={{ fontSize: '12px' }}>Ближайшие события (0-2 дня)</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                            <img src="/markers/yellow.png" alt="Upcoming events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
+                            <span style={{ fontSize: '12px' }}>События в пределах 10 дней</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                            <img src="/markers/red.png" alt="Future events" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
+                            <span style={{ fontSize: '12px' }}>События через 10 дней и более</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <img src="https://cdn-icons-png.flaticon.com/512/7976/7976479.png" alt="User location" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
+                            <span style={{ fontSize: '12px' }}>Местоположение пользователя</span>
+                        </div>
+                    </div>
+                </>
+            )}
 
             {selectedEvent && (
                 <div style={{
