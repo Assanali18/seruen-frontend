@@ -55,7 +55,7 @@ export default function GoogleMaps() {
                 const response = await axiosInstance.get(url);
                 console.log('response', response.data);
 
-                const recommendations = response.data.recommendations || [];
+                const recommendations = response.data || [];
 
                 // Определяем местоположение пользователя (если доступно)
                 if (navigator.geolocation) {
