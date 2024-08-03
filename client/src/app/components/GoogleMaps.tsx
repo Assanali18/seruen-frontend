@@ -5,6 +5,7 @@ import axios from 'axios';
 import WebApp from "@twa-dev/sdk";
 import {axiosInstance} from "@/axios/axiosInstance";
 
+
 const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
 const getCoordinatesFromAddress = async (address: string | undefined) => {
@@ -46,11 +47,11 @@ export default function GoogleMaps() {
                     return;
                 }
 
-                const url = `${process.env.SERVER_API_URL}/api/users/${username}/recommendations`;
+                const url = `${process.env.NEXT_PUBLIC_SERVER_API_URL}/api/users/${username}/recommendations`;
                 console.log('request to', url);
                 setRequestUrl(url);
 
-                const response = await axiosInstance.get(url);
+                const response = await axiosInstance.get(`/api/users/${username}/recommendations`);
                 console.log('response', response.data);
 
                 setRecommendations(response.data.recommendations || []);
