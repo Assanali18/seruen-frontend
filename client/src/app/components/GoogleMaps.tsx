@@ -28,27 +28,29 @@ const getCoordinatesFromAddress = async (address: string | undefined) => {
 };
 
 export default function GoogleMaps() {
-    // const mapRef = React.useRef<HTMLDivElement>(null);
     const [userData, setUserData] = useState<any | null>(null);
     const [recommendations, setRecommendations] = useState<any[]>([]);
+    const [requestUrl, setRequestUrl] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log('WebApp.initDataUnsafe', WebApp.initDataUnsafe)
+        console.log('WebApp.initDataUnsafe', WebApp.initDataUnsafe);
         const fetchUserData = async () => {
             try {
-                if(WebApp.initDataUnsafe.user){
+                if (WebApp.initDataUnsafe.user) {
                     setUserData(WebApp.initDataUnsafe.user);
                 }
-                const username = userData.username;
+                const username = WebApp.initDataUnsafe.user?.username;
 
                 if (!username) {
                     console.error('No user data available');
                     return;
                 }
 
-                console.log('request to', `${process.env.SERVER_API_URL}/api/users/${username}/recommendations`)
-                const response = await axiosInstance.get(`/api/users/${username}/recommendations`);
+                const url = `${process.env.SERVER_API_URL}/api/users/${username}/recommendations`;
+                console.log('request to', url);
+                setRequestUrl(url);
 
+                const response = await axiosInstance.get(url);
                 console.log('response', response.data);
 
                 setRecommendations(response.data.recommendations || []);
@@ -67,6 +69,13 @@ export default function GoogleMaps() {
 
             <h2>Recommendations</h2>
             <pre>{JSON.stringify(recommendations, null, 2)}</pre>
+
+            {requestUrl && (
+                <div>
+                    <h3>Request URL</h3>
+                    <p>{requestUrl}</p>
+                </div>
+            )}
         </div>
     );
 }
