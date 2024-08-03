@@ -130,7 +130,7 @@ export default function GoogleMaps() {
                     map,
                     position: userLocation,
                     icon: {
-                        url: 'https://example.com/user-icon.png', // Укажите корректный URL иконки для пользователя
+                        url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png', // Укажите корректный URL иконки для пользователя
                         scaledSize: new google.maps.Size(40, 40),
                     },
                 });
