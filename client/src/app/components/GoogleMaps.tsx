@@ -59,7 +59,7 @@ export default function GoogleMaps() {
                 let response;
                 try {
                     if (username) {
-                        const url = ${serverApiUrl}api/users/${username}/recommendations;
+                        const url = `${serverApiUrl}api/users/${username}/recommendations`;
                         console.log('request to', url);
                         response = await axiosInstance.get(url);
                     } else {
@@ -69,7 +69,7 @@ export default function GoogleMaps() {
                     if (axios.isAxiosError(err) && err.response?.status === 404) {
                         const firstName = user?.first_name;
                         if (firstName) {
-                            const url = ${serverApiUrl}api/users/${firstName}/recommendations;
+                            const url = `${serverApiUrl}api/users/${firstName}/recommendations`;
                             console.log('request to', url);
                             response = await axiosInstance.get(url);
                         } else {
