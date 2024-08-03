@@ -49,6 +49,7 @@ export default function GoogleMaps() {
     const [markerPositions, setMarkerPositions] = useState<any[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
+    const [noRecommendations, setNoRecommendations] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -82,6 +83,10 @@ export default function GoogleMaps() {
 
                 console.log('response', response.data);
                 const recommendations = response.data || [];
+
+                if (recommendations.length === 0) {
+                    setNoRecommendations(true);
+                }
 
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -276,17 +281,26 @@ export default function GoogleMaps() {
                     </div>
                 </div>
             ) : (
-                <div
-                    ref={mapRef}
-                    className="h-[calc(100vh-56px)] w-full"
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                    }}
-                />
+                <>
+                    {markerPositions.length === 0 && noRecommendations && (
+                        <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
+                            <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+                                Дождитесь, пока ваши рекомендации загрузятся, мы вас уведомим...
+                            </p>
+                        </div>
+                    )}
+                    <div
+                        ref={mapRef}
+                        className="h-[calc(100vh-56px)] w-full"
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                        }}
+                    />
+                </>
             )}
 
             {selectedEvent && (
