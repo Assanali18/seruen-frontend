@@ -122,139 +122,139 @@ export default function GoogleMaps() {
     }, []);
 
     useEffect(() => {
-        const initializeMap = async () => {
-            const loader = new Loader({
-                apiKey: googleMapsApiKey,
-                version: 'quarterly',
-            });
+        if (!loading && !noRecommendations) {
+            const initializeMap = async () => {
+                const loader = new Loader({
+                    apiKey: googleMapsApiKey,
+                    version: 'quarterly',
+                });
 
-            const google = await loader.load();
-            const { Map, Marker } = google.maps;
+                const google = await loader.load();
+                const { Map, Marker } = google.maps;
 
-            const options: google.maps.MapOptions = {
-                center: userLocation,
-                zoom: 12,
-                mapTypeControl: false,
-                fullscreenControl: false,
-                streetViewControl: false,
-                styles: [
-                    { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
-                    { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
-                    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
-                    {
-                        featureType: 'administrative.locality',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }],
-                    },
-                    {
-                        featureType: 'poi',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }],
-                    },
-                    {
-                        featureType: 'poi.park',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#263c3f' }],
-                    },
-                    {
-                        featureType: 'poi.park',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#6b9a76' }],
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#38414e' }],
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'geometry.stroke',
-                        stylers: [{ color: '#212a37' }],
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#9ca5b3' }],
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#746855' }],
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'geometry.stroke',
-                        stylers: [{ color: '#1f2835' }],
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#f3d19c' }],
-                    },
-                    {
-                        featureType: 'transit',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#2f3948' }],
-                    },
-                    {
-                        featureType: 'transit.station',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }],
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#17263c' }],
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#515c6d' }],
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'labels.text.stroke',
-                        stylers: [{ color: '#17263c' }],
-                    },
-                ],
+                const options: google.maps.MapOptions = {
+                    center: userLocation,
+                    zoom: 12,
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                    streetViewControl: false,
+                    styles: [
+                        { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+                        { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+                        { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+                        {
+                            featureType: 'administrative.locality',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#d59563' }],
+                        },
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#d59563' }],
+                        },
+                        {
+                            featureType: 'poi.park',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#263c3f' }],
+                        },
+                        {
+                            featureType: 'poi.park',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#6b9a76' }],
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#38414e' }],
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'geometry.stroke',
+                            stylers: [{ color: '#212a37' }],
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#9ca5b3' }],
+                        },
+                        {
+                            featureType: 'road.highway',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#746855' }],
+                        },
+                        {
+                            featureType: 'road.highway',
+                            elementType: 'geometry.stroke',
+                            stylers: [{ color: '#1f2835' }],
+                        },
+                        {
+                            featureType: 'road.highway',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#f3d19c' }],
+                        },
+                        {
+                            featureType: 'transit',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#2f3948' }],
+                        },
+                        {
+                            featureType: 'transit.station',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#d59563' }],
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#17263c' }],
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'labels.text.fill',
+                            stylers: [{ color: '#515c6d' }],
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'labels.text.stroke',
+                            stylers: [{ color: '#17263c' }],
+                        },
+                    ],
+                };
+
+                const map = new Map(mapRef.current as HTMLDivElement, options);
+
+                if (userLocation) {
+                    new Marker({
+                        map,
+                        position: userLocation,
+                        icon: {
+                            url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png',
+                            scaledSize: new google.maps.Size(50, 50),
+                        },
+                    });
+                }
+
+                markerPositions.forEach(({ lat, lng, recommendation }) => {
+                    const iconUrl = getMarkerIconUrl(recommendation.date);
+                    const marker = new Marker({
+                        map,
+                        position: { lat, lng },
+                        icon: {
+                            url: iconUrl,
+                            scaledSize: new google.maps.Size(30, 30),
+                        },
+                    });
+
+                    marker.addListener('click', () => {
+                        setSelectedEvent(recommendation);
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(() => marker.setAnimation(null), 750);
+                    });
+                });
             };
 
-            const map = new Map(mapRef.current as HTMLDivElement, options);
-
-            if (userLocation) {
-                new Marker({
-                    map,
-                    position: userLocation,
-                    icon: {
-                        url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png',
-                        scaledSize: new google.maps.Size(50, 50),
-                    },
-                });
-            }
-
-            markerPositions.forEach(({ lat, lng, recommendation }) => {
-                const iconUrl = getMarkerIconUrl(recommendation.date);
-                const marker = new Marker({
-                    map,
-                    position: { lat, lng },
-                    icon: {
-                        url: iconUrl,
-                        scaledSize: new google.maps.Size(30, 30),
-                    },
-                });
-
-                marker.addListener('click', () => {
-                    setSelectedEvent(recommendation);
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    setTimeout(() => marker.setAnimation(null), 750);
-                });
-            });
-        };
-
-        if (!loading) {
             initializeMap();
         }
-    }, [userLocation, markerPositions, loading]);
+    }, [userLocation, markerPositions, loading, noRecommendations]);
 
     return (
         <div>
@@ -280,27 +280,24 @@ export default function GoogleMaps() {
                         <span className="sr-only">Loading...</span>
                     </div>
                 </div>
+            ) : noRecommendations ? (
+                <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
+                    <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+                        Дождитесь, пока ваши рекомендации загрузятся, мы вас уведомим...
+                    </p>
+                </div>
             ) : (
-                <>
-                    {markerPositions.length === 0 && noRecommendations && (
-                        <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
-                            <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
-                                Дождитесь, пока ваши рекомендации загрузятся, мы вас уведомим...
-                            </p>
-                        </div>
-                    )}
-                    <div
-                        ref={mapRef}
-                        className="h-[calc(100vh-56px)] w-full"
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                        }}
-                    />
-                </>
+                <div
+                    ref={mapRef}
+                    className="h-[calc(100vh-56px)] w-full"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                    }}
+                />
             )}
 
             {selectedEvent && (
@@ -316,6 +313,21 @@ export default function GoogleMaps() {
                     borderRadius: '10px 10px 0 0',
                     transition: 'all 0.3s ease-in-out'
                 }}>
+                    <button
+                        onClick={() => setSelectedEvent(null)}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: '#fff',
+                            fontSize: '20px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        &times;
+                    </button>
                     <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{selectedEvent.title}</h3>
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#ccc' }}>{selectedEvent.venue}</p>
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#aaa' }}>{selectedEvent.date}</p>
