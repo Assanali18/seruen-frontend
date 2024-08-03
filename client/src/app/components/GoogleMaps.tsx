@@ -32,7 +32,8 @@ const getCoordinatesFromAddress = async (address: string | undefined) => {
 export default function GoogleMaps() {
     const mapRef = useRef<HTMLDivElement>(null);
     const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
-    const [markerPositions, setMarkerPositions] = useState<google.maps.LatLngLiteral[]>([]);
+    const [markerPositions, setMarkerPositions] = useState<any[]>([]);
+    const [selectedEvent, setSelectedEvent] = useState<any | null>(null); // Состояние для выбранного события
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -82,7 +83,8 @@ export default function GoogleMaps() {
                         const positions = await Promise.all(
                             recommendations.map(async (recommendation: any) => {
                                 if (recommendation.venue) {
-                                    return getCoordinatesFromAddress(recommendation.venue);
+                                    const coordinates = await getCoordinatesFromAddress(recommendation.venue);
+                                    return { ...coordinates, recommendation };
                                 }
                                 return null;
                             })
@@ -112,10 +114,10 @@ export default function GoogleMaps() {
             });
 
             const google = await loader.load();
-            const { Map, Marker } = google.maps;
+            const { Map, Marker, InfoWindow } = google.maps;
 
             const options: google.maps.MapOptions = {
-                center: userLocation || { lat: 39.60128890889341, lng: -9.069839810859907 },
+                center: userLocation,
                 zoom: 12,
                 mapTypeControl: false,
                 fullscreenControl: false,
@@ -125,21 +127,27 @@ export default function GoogleMaps() {
 
             const map = new Map(mapRef.current as HTMLDivElement, options);
 
+            // Добавление маркера для местоположения пользователя
             if (userLocation) {
                 new Marker({
                     map,
                     position: userLocation,
                     icon: {
                         url: 'https://cdn-icons-png.flaticon.com/512/7976/7976479.png', // Укажите корректный URL иконки для пользователя
-                        scaledSize: new google.maps.Size(40, 40),
+                        scaledSize: new google.maps.Size(50, 50),
                     },
                 });
             }
 
+            // Отображение маркеров для рекомендаций
             markerPositions.forEach((position) => {
-                new Marker({
+                const marker = new Marker({
                     map,
-                    position,
+                    position: { lat: position.lat, lng: position.lng },
+                });
+
+                marker.addListener('click', () => {
+                    setSelectedEvent(position.recommendation);
                 });
             });
         };
@@ -165,6 +173,15 @@ export default function GoogleMaps() {
                         right: 0,
                     }}
                 />
+            )}
+
+            {selectedEvent && (
+                <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', backgroundColor: 'white', padding: '10px', boxShadow: '0px -2px 10px rgba(0, 0, 0, 0.1)' }}>
+                    <h3>{selectedEvent.title}</h3>
+                    <p>{selectedEvent.venue}</p>
+                    <p>{selectedEvent.date}</p>
+                    <button onClick={() => window.open(selectedEvent.ticketLink, '_blank')}>Подробнее</button>
+                </div>
             )}
         </div>
     );
