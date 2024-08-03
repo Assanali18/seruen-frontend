@@ -33,6 +33,7 @@ export default function GoogleMaps() {
     const [recommendations, setRecommendations] = useState<any[]>([]);
 
     useEffect(() => {
+        console.log('WebApp.initDataUnsafe', WebApp.initDataUnsafe)
         const fetchUserData = async () => {
             try {
                 if(WebApp.initDataUnsafe.user){
