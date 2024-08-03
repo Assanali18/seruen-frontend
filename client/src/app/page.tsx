@@ -61,7 +61,7 @@ export default function Home() {
 
         try {
             console.log('userPreferences:', userPreferences)
-            const response = await axiosInstance.post('/api/users/', userPreferences);
+            const response = await axiosInstance.post('api/users/', userPreferences);
 
             if (response.status === 201) {
                 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {

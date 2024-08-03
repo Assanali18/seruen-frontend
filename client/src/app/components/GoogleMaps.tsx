@@ -52,7 +52,7 @@ export default function GoogleMaps() {
                 console.log('request to', url);
                 setRequestUrl(url);
 
-                const response = await axiosInstance.get(`/api/users/${username}/recommendations`);
+                const response = await axiosInstance.get(`api/users/${username}/recommendations`);
                 console.log('response', response.data);
 
                 setRecommendations(response.data.recommendations || []);
