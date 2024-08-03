@@ -134,7 +134,7 @@ export default function GoogleMaps() {
                     const { Map, Marker } = google.maps;
 
                     const options: google.maps.MapOptions = {
-                        center: userLocation,
+                        center: userLocation || { lat:43.25667, lng: 76.92861},
                         zoom: 12,
                         mapTypeControl: false,
                         fullscreenControl: false,
