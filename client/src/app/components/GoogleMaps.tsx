@@ -35,11 +35,11 @@ const getMarkerIconUrl = (eventDate: string) => {
     const daysUntilEvent = (eventDay.getTime() - today.getTime()) / (1000 * 3600 * 24);
 
     if (daysUntilEvent <= 2) {
-        return 'https://example.com/green-marker.png'; // Зеленый маркер
+        return 'blob:https://batchtools.pro/eb57fdbe-7cc3-4969-93c8-80a67a8806d4'; // Зеленый маркер
     } else if (daysUntilEvent > 2 && daysUntilEvent <= 10) {
-        return 'https://example.com/yellow-marker.png'; // Желтый маркер
+        return 'blob:https://batchtools.pro/a580dbf6-56c7-43be-b310-5d8f473618e1'; // Желтый маркер
     } else {
-        return 'https://example.com/red-marker.png'; // Красный маркер
+        return 'https://cdn-icons-png.flaticon.com/512/9855/9855267.png'; // Красный маркер
     }
 };
 
@@ -127,7 +127,7 @@ export default function GoogleMaps() {
             const { Map, Marker } = google.maps;
 
             const options: google.maps.MapOptions = {
-                center: userLocation || { lat: 39.60128890889341, lng: -9.069839810859907 },
+                center: userLocation,
                 zoom: 12,
                 mapTypeControl: false,
                 fullscreenControl: false,
