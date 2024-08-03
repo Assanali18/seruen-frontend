@@ -53,9 +53,9 @@ export default function GoogleMaps() {
                 setRequestUrl(url);
 
                 const response = await axiosInstance.get(`api/users/${username}/recommendations`);
-                console.log('response', response.data);
+                console.log('response', response);
 
-                setRecommendations(response.data.recommendations || []);
+                setRecommendations(response.data || []);
             } catch (error) {
                 console.error('Error fetching user data or recommendations:', error);
             }
