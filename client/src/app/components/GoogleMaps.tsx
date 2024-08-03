@@ -33,28 +33,40 @@ export default function GoogleMaps() {
     const mapRef = useRef<HTMLDivElement>(null);
     const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
     const [markerPositions, setMarkerPositions] = useState<google.maps.LatLngLiteral[]>([]);
-    const [requestUrl, setRequestUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const { user } = WebApp.initDataUnsafe;
-                const username = user?.username || user?.first_name;
+                const username = user?.username;
 
-                if (!username) {
-                    console.error('No user data available');
-                    setLoading(false);
-                    return;
+                let response;
+                try {
+                    if (username) {
+                        const url = `${serverApiUrl}api/users/${username}/recommendations`;
+                        console.log('request to', url);
+                        response = await axiosInstance.get(url);
+                    } else {
+                        throw new Error('No username provided');
+                    }
+                } catch (err) {
+                    // Если запрос по username возвращает 404, пробуем использовать first_name
+                    if (axios.isAxiosError(err) && err.response?.status === 404) {
+                        const firstName = user?.first_name;
+                        if (firstName) {
+                            const url = `${serverApiUrl}api/users/${firstName}/recommendations`;
+                            console.log('request to', url);
+                            response = await axiosInstance.get(url);
+                        } else {
+                            throw new Error('No first name provided');
+                        }
+                    } else {
+                        throw err;
+                    }
                 }
 
-                const url = `${serverApiUrl}api/users/${username}/recommendations`;
-                console.log('request to', url);
-                setRequestUrl(url);
-
-                const response = await axiosInstance.get(url);
                 console.log('response', response.data);
-
                 const recommendations = response.data || [];
 
                 // Определяем местоположение пользователя (если доступно)
@@ -99,7 +111,8 @@ export default function GoogleMaps() {
                 version: 'quarterly',
             });
 
-            const { Map } = await loader.importLibrary('maps');
+            const google = await loader.load();
+            const { Map, Marker } = google.maps;
 
             const options: google.maps.MapOptions = {
                 center: userLocation || { lat: 39.60128890889341, lng: -9.069839810859907 },
@@ -113,18 +126,18 @@ export default function GoogleMaps() {
             const map = new Map(mapRef.current as HTMLDivElement, options);
 
             if (userLocation) {
-                new google.maps.Marker({
+                new Marker({
                     map,
                     position: userLocation,
                     icon: {
-                        url: 'URL вашей иконки для пользователя',
+                        url: 'https://example.com/user-icon.png', // Укажите корректный URL иконки для пользователя
                         scaledSize: new google.maps.Size(40, 40),
                     },
                 });
             }
 
             markerPositions.forEach((position) => {
-                new google.maps.Marker({
+                new Marker({
                     map,
                     position,
                 });
@@ -141,24 +154,17 @@ export default function GoogleMaps() {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div>
-                    {/*<h1>Google Maps with Recommendations</h1>*/}
-                    {/*<div>*/}
-                    {/*    <h3>Request URL</h3>*/}
-                    {/*    <p>{requestUrl}</p>*/}
-                    {/*</div>*/}
-                    <div
-                        ref={mapRef}
-                        className="h-[calc(100vh-56px)] w-full"
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                        }}
-                    />
-                </div>
+                <div
+                    ref={mapRef}
+                    className="h-[calc(100vh-56px)] w-full"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                    }}
+                />
             )}
         </div>
     );
