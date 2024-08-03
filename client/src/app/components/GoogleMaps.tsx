@@ -35,11 +35,11 @@ const getMarkerIconUrl = (eventDate: string) => {
     const daysUntilEvent = (eventDay.getTime() - today.getTime()) / (1000 * 3600 * 24);
 
     if (daysUntilEvent <= 2) {
-        return 'blob:https://batchtools.pro/eb57fdbe-7cc3-4969-93c8-80a67a8806d4'; // Зеленый маркер
+        return '/markers/yellow.png'; // Зеленый маркер
     } else if (daysUntilEvent > 2 && daysUntilEvent <= 10) {
-        return 'blob:https://batchtools.pro/a580dbf6-56c7-43be-b310-5d8f473618e1'; // Желтый маркер
+        return '/markers/green.png'; // Желтый маркер
     } else {
-        return 'https://cdn-icons-png.flaticon.com/512/9855/9855267.png'; // Красный маркер
+        return '/markers/red.png'; // Красный маркер
     }
 };
 
