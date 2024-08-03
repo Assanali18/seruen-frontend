@@ -107,8 +107,21 @@ export default function GoogleMaps() {
                         );
 
                         setMarkerPositions(positions.filter(position => position !== null));
-                    }, (error) => {
+                    }, async (error) => {
                         console.error('Error fetching user location:', error);
+                        // Если ошибка, запрашиваем геоданные через Telegram
+                        try {
+                            const geoData = await WebApp.requestGeoLocation();
+                            if (geoData) {
+                                const userPosition = {
+                                    lat: geoData.latitude,
+                                    lng: geoData.longitude,
+                                };
+                                setUserLocation(userPosition);
+                            }
+                        } catch (telegramError) {
+                            console.error('Error fetching user location via Telegram:', telegramError);
+                        }
                     });
                 }
             } catch (error) {
@@ -134,7 +147,7 @@ export default function GoogleMaps() {
                     const { Map, Marker } = google.maps;
 
                     const options: google.maps.MapOptions = {
-                        center: userLocation || { lat:43.25667, lng: 76.92861},
+                        center: userLocation || { lat: 43.25667, lng: 76.92861 },
                         zoom: 12,
                         mapTypeControl: false,
                         fullscreenControl: false,
