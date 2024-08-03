@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import WebApp from "@twa-dev/sdk";
+import {axiosInstance} from "@/axios/axiosInstance";
 
 const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
@@ -45,7 +46,7 @@ export default function GoogleMaps() {
                 }
 
                 console.log('request to', `${process.env.SERVER_API_URL}/api/users/${username}/recommendations`)
-                const response = await axios.get(`/api/users/${username}/recommendations`);
+                const response = await axiosInstance.get(`/api/users/${username}/recommendations`);
 
                 console.log('response', response.data);
 
