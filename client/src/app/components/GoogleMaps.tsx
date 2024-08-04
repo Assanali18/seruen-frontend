@@ -292,11 +292,14 @@ export default function GoogleMaps() {
                         </svg>
                         <span className="sr-only">Loading...</span>
                     </div>
+                    <p style={{ color: '#999', fontSize: '12px', textAlign: 'center', marginTop: '10px' }}>
+                        Если у вас Android, пожалуйста, включите геоданные.
+                    </p>
                 </div>
             ) : noRecommendations ? (
                 <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
                     <p style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
-                        У вас пока нет рекомендаций. Пожалуйста, подождите, пока они загрузятся.
+                        У вас пока нет рекомендаций. Пожалуйста, подождите, пока они загрузятся. Для этого запустите /start и введите все данные.
                     </p>
                 </div>
             ) : geoPermissionDenied ? (
