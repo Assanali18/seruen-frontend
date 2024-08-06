@@ -53,92 +53,94 @@ export default function GoogleMaps() {
     const [geoPermissionDenied, setGeoPermissionDenied] = useState(false);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const { user } = WebApp.initDataUnsafe;
-                const username = user?.username;
-
-                let response;
+        if(window!==undefined) {
+            const fetchUserData = async () => {
                 try {
-                    if (username) {
-                        const url = `${serverApiUrl}api/users/${username}/recommendations`;
-                        console.log('request to', url);
-                        response = await axiosInstance.get(url);
-                    } else {
-                        throw new Error('No username provided');
-                    }
-                } catch (err) {
-                    if (axios.isAxiosError(err) && err.response?.status === 404) {
-                        const firstName = user?.first_name;
-                        if (firstName) {
-                            const url = `${serverApiUrl}api/users/${firstName}/recommendations`;
+                    const { user } = WebApp.initDataUnsafe;
+                    const username = user?.username;
+
+                    let response;
+                    try {
+                        if (username) {
+                            const url = `${serverApiUrl}api/users/${username}/recommendations`;
                             console.log('request to', url);
                             response = await axiosInstance.get(url);
                         } else {
-                            throw new Error('No first name provided');
+                            throw new Error('No username provided');
                         }
-                    } else {
-                        throw err;
+                    } catch (err) {
+                        if (axios.isAxiosError(err) && err.response?.status === 404) {
+                            const firstName = user?.first_name;
+                            if (firstName) {
+                                const url = `${serverApiUrl}api/users/${firstName}/recommendations`;
+                                console.log('request to', url);
+                                response = await axiosInstance.get(url);
+                            } else {
+                                throw new Error('No first name provided');
+                            }
+                        } else {
+                            throw err;
+                        }
                     }
-                }
 
-                console.log('response', response.data);
-                const recommendations = response.data || [];
+                    console.log('response', response.data);
+                    const recommendations = response.data || [];
 
-                if (recommendations.length === 0) {
-                    setNoRecommendations(true);
-                }
+                    if (recommendations.length === 0) {
+                        setNoRecommendations(true);
+                    }
 
-                if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(
-                        async (position) => {
-                            const userPosition = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                            };
-                            setUserLocation(userPosition);
+                    if ("geolocation" in navigator) {
+                        navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                                const userPosition = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude,
+                                };
+                                setUserLocation(userPosition);
 
-                            const positions = await Promise.all(
-                                recommendations.map(async (recommendation: any) => {
-                                    if (recommendation.venue) {
-                                        const coordinates = await getCoordinatesFromAddress(recommendation.venue);
-                                        return { ...coordinates, recommendation };
+                                const positions = await Promise.all(
+                                    recommendations.map(async (recommendation: any) => {
+                                        if (recommendation.venue) {
+                                            const coordinates = await getCoordinatesFromAddress(recommendation.venue);
+                                            return { ...coordinates, recommendation };
+                                        }
+                                        return null;
+                                    })
+                                );
+
+                                // Filter to keep only the earliest event for each coordinate
+                                const uniquePositions = positions.reduce((acc, pos) => {
+                                    if (pos) {
+                                        const key = `${pos.lat},${pos.lng}`;
+                                        if (!acc[key] || new Date(pos.recommendation.date) < new Date(acc[key].recommendation.date)) {
+                                            acc[key] = pos;
+                                        }
                                     }
-                                    return null;
-                                })
-                            );
+                                    return acc;
+                                }, {});
 
-                            // Filter to keep only the earliest event for each coordinate
-                            const uniquePositions = positions.reduce((acc, pos) => {
-                                if (pos) {
-                                    const key = `${pos.lat},${pos.lng}`;
-                                    if (!acc[key] || new Date(pos.recommendation.date) < new Date(acc[key].recommendation.date)) {
-                                        acc[key] = pos;
-                                    }
-                                }
-                                return acc;
-                            }, {});
+                                setMarkerPositions(Object.values(uniquePositions));
+                            },
+                            (error) => {
+                                console.error('Error fetching user location:', error);
+                                setGeoPermissionDenied(true);
+                            }
+                        );
+                    } else {
+                        console.error("Geolocation is not available.");
+                        setGeoPermissionDenied(true);
+                    }
 
-                            setMarkerPositions(Object.values(uniquePositions));
-                        },
-                        (error) => {
-                            console.error('Error fetching user location:', error);
-                            setGeoPermissionDenied(true);
-                        }
-                    );
-                } else {
-                    console.error("Geolocation is not available.");
-                    setGeoPermissionDenied(true);
+                } catch (error) {
+                    console.error('Error fetching user data or recommendations:', error);
+                } finally {
+                    setLoading(false);
                 }
+            };
 
-            } catch (error) {
-                console.error('Error fetching user data or recommendations:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUserData();
+            fetchUserData();
+        }
     }, []);
 
     useEffect(() => {
