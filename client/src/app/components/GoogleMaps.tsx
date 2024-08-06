@@ -269,7 +269,6 @@ export default function GoogleMaps() {
     }, [userLocation, markerPositions, loading, noRecommendations, geoPermissionDenied]);
 
 
-
     return (
         <div>
             {loading ? (
@@ -355,7 +354,7 @@ export default function GoogleMaps() {
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#ccc' }}>{selectedEvent.venue}</p>
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#aaa' }}>{selectedEvent.date}</p>
                     <button
-                        id="openLinkButton"
+                        onClick={() => WebApp.openLink(selectedEvent.ticketLink)}
                         style={{
                             marginTop: '10px',
                             padding: '10px 20px',
