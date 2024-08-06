@@ -108,7 +108,18 @@ export default function GoogleMaps() {
                                 })
                             );
 
-                            setMarkerPositions(positions.filter(position => position !== null));
+                            // Filter to keep only the earliest event for each coordinate
+                            const uniquePositions = positions.reduce((acc, pos) => {
+                                if (pos) {
+                                    const key = `${pos.lat},${pos.lng}`;
+                                    if (!acc[key] || new Date(pos.recommendation.date) < new Date(acc[key].recommendation.date)) {
+                                        acc[key] = pos;
+                                    }
+                                }
+                                return acc;
+                            }, {});
+
+                            setMarkerPositions(Object.values(uniquePositions));
                         },
                         (error) => {
                             console.error('Error fetching user location:', error);
@@ -247,7 +258,8 @@ export default function GoogleMaps() {
                         marker.addListener('click', () => {
                             setSelectedEvent(recommendation);
                             marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(() => marker.setAnimation(null), 750);
+                            setTimeout(() =>
+                            marker.setAnimation(null), 750);
                         });
                     });
                 } catch (error) {
@@ -315,7 +327,7 @@ export default function GoogleMaps() {
             {selectedEvent && (
                 <div style={{
                     position: 'fixed',
-                    bottom: 0,
+                    bottom: '50px', // Updated to make the info card more visible
                     left: 0,
                     width: '100%',
                     backgroundColor: '#2b2b2b',
@@ -344,7 +356,7 @@ export default function GoogleMaps() {
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#ccc' }}>{selectedEvent.venue}</p>
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#aaa' }}>{selectedEvent.date}</p>
                     <button
-                        onClick={() => window.open(selectedEvent.ticketLink, '_blank')}
+                        onClick={() => WebApp.openLink(selectedEvent.ticketLink)}
                         style={{
                             marginTop: '10px',
                             padding: '10px 20px',
