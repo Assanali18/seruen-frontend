@@ -268,6 +268,8 @@ export default function GoogleMaps() {
         }
     }, [userLocation, markerPositions, loading, noRecommendations, geoPermissionDenied]);
 
+
+
     return (
         <div>
             {loading ? (
@@ -324,7 +326,7 @@ export default function GoogleMaps() {
             {selectedEvent && (
                 <div style={{
                     position: 'fixed',
-                    bottom: 0,
+                    bottom: '50px',
                     left: 0,
                     width: '100%',
                     backgroundColor: '#2b2b2b',
@@ -353,7 +355,7 @@ export default function GoogleMaps() {
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#ccc' }}>{selectedEvent.venue}</p>
                     <p style={{ margin: '5px 0', fontSize: '14px', color: '#aaa' }}>{selectedEvent.date}</p>
                     <button
-                        onClick={() => window.open(selectedEvent.ticketLink, '_blank')}
+                        id="openLinkButton"
                         style={{
                             marginTop: '10px',
                             padding: '10px 20px',
