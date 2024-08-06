@@ -255,8 +255,6 @@ export default function GoogleMaps() {
 
                         marker.addListener('click', () => {
                             setSelectedEvent(recommendation);
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(() => marker.setAnimation(null), 750);
                         });
                     });
                 } catch (error) {
@@ -322,48 +320,26 @@ export default function GoogleMaps() {
             )}
 
             {selectedEvent && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '50px',
-                    left: 0,
-                    width: '100%',
-                    backgroundColor: '#2b2b2b',
-                    color: '#fff',
-                    padding: '15px 20px',
-                    boxShadow: '0px -2px 10px rgba(0, 0, 0, 0.3)',
-                    borderRadius: '10px 10px 0 0',
-                    transition: 'all 0.3s ease-in-out'
-                }}>
+                <div
+                    className={`absolute transform -translate-x-1/2 ${selectedEvent ? 'opacity-100 visible' : 'opacity-0 invisible'} transition-opacity duration-300 bg-gray-800 text-white p-4 rounded-lg shadow-lg`}
+                    style={{
+                        bottom: '150%', // Расположение над маркером
+                        left: '50%' // Центрирование
+                    }}
+                >
                     <button
                         onClick={() => setSelectedEvent(null)}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            color: '#fff',
-                            fontSize: '20px',
-                            cursor: 'pointer',
-                        }}
+                        className="absolute top-1 right-1 text-lg"
+                        style={{color: '#fff'}}
                     >
                         &times;
                     </button>
-                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{selectedEvent.title}</h3>
-                    <p style={{ margin: '5px 0', fontSize: '14px', color: '#ccc' }}>{selectedEvent.venue}</p>
-                    <p style={{ margin: '5px 0', fontSize: '14px', color: '#aaa' }}>{selectedEvent.date}</p>
+                    <h3 className="text-lg font-bold">{selectedEvent?.title}</h3>
+                    <p className="text-sm">{selectedEvent?.venue}</p>
+                    <p className="text-sm">{selectedEvent?.date}</p>
                     <button
-                        onClick={() => window.open(selectedEvent.ticketLink)}
-                        style={{
-                            marginTop: '10px',
-                            padding: '10px 20px',
-                            backgroundColor: '#ff6347',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                            fontSize: '14px'
-                        }}
+                        onClick={() => window.open(selectedEvent?.ticketLink, '_blank')}
+                        className="mt-2 py-2 px-4 bg-red-500 rounded text-white cursor-pointer text-sm"
                     >
                         Подробнее
                     </button>
