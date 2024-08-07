@@ -29,7 +29,11 @@ const getCoordinatesFromAddress = async (address: string | undefined) => {
     }
 };
 
-const getMarkerIconUrl = (eventDate: string) => {
+const getMarkerIconUrl = (eventDate: string, isSelected: boolean) => {
+    if (isSelected) {
+        return '/markers/green.png';
+    }
+
     const today = new Date();
     const eventDay = new Date(eventDate);
     const daysUntilEvent = (eventDay.getTime() - today.getTime()) / (1000 * 3600 * 24);
@@ -243,34 +247,37 @@ export default function GoogleMaps() {
                     }
 
                     markerPositions.forEach(({ lat, lng, recommendation }) => {
-                        const iconUrl = getMarkerIconUrl(recommendation.date);
                         const marker = new Marker({
                             map,
                             position: { lat, lng },
                             icon: {
-                                url: iconUrl,
+                                url: getMarkerIconUrl(recommendation.date, selectedEvent === recommendation),
                                 scaledSize: new google.maps.Size(30, 30),
                             },
                         });
 
                         marker.addListener('click', () => {
                             setSelectedEvent(recommendation);
-                            // Removing bounce animation
+                            // Update marker icon on click
+                            marker.setIcon({
+                                url: '/markers/green.png',
+                                scaledSize: new google.maps.Size(30, 30),
+                            });
                         });
                     });
-                } catch ( error) {
+                } catch (error) {
                     console.error('Error initializing map:', error);
                 }
             };
 
             initializeMap();
         }
-    }, [userLocation, markerPositions, loading, noRecommendations, geoPermissionDenied]);
+    }, [userLocation, markerPositions, loading, noRecommendations, geoPermissionDenied, selectedEvent]);
 
     return (
-        <div>
+        <div className="relative w-full h-screen">
             {loading ? (
-                <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] w-full">
+                <div className="flex flex-col items-center justify-center h-full">
                     <div className="flex items-center justify-center">
                         <svg
                             aria-hidden="true"
@@ -295,13 +302,13 @@ export default function GoogleMaps() {
                     </p>
                 </div>
             ) : noRecommendations ? (
-                <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
+                <div className="flex items-center justify-center h-full">
                     <p className="text-white text-lg font-bold">
                         У вас пока нет рекомендаций. Пожалуйста, подождите, пока они загрузятся. Для этого запустите /start и введите все данные.
                     </p>
                 </div>
             ) : geoPermissionDenied ? (
-                <div className="flex items-center justify-center h-[calc(100vh-56px)] w-full">
+                <div className="flex items-center justify-center h-full">
                     <p className="text-white text-lg font-bold">
                         Для отображения карты, пожалуйста, предоставьте доступ к геоданным и включите геопозицию.
                     </p>
@@ -309,31 +316,12 @@ export default function GoogleMaps() {
             ) : (
                 <div
                     ref={mapRef}
-                    className="h-[calc(100vh-56px)] w-full"
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                    }}
+                    className="absolute top-0 left-0 right-0 bottom-0"
                 />
             )}
 
             {selectedEvent && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '50px', // Adjusted for better visibility
-                    left: '50%', // Center align
-                    transform: 'translateX(-50%)', // Center align
-                    width: '90%', // Adjust width
-                    backgroundColor: '#2b2b2b',
-                    color: '#fff',
-                    padding: '20px',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                    borderRadius: '10px',
-                    transition: 'all 0.3s ease-in-out'
-                }}>
+                <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg transition-transform transform translate-y-full animate-slide-up">
                     <div className="relative flex flex-col items-start">
                         <button
                             onClick={() => setSelectedEvent(null)}
@@ -356,3 +344,4 @@ export default function GoogleMaps() {
         </div>
     );
 }
+
