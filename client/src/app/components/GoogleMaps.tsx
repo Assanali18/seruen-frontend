@@ -323,7 +323,7 @@ export default function GoogleMaps() {
             )}
 
             {selectedEvent && (
-                <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg rounded-t-lg transition-transform duration-300 ease-in-out transform">
+                <div className="fixed bottom-16 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg rounded-t-lg transition-transform duration-300 ease-in-out transform">
                     <div className="relative flex flex-col items-start">
                         <button
                             onClick={() => setSelectedEvent(null)}
